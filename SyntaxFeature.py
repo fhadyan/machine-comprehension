@@ -13,8 +13,44 @@ def first(arr):
         arr=''
     return arr
 
+def syntaxFeature(statement,d):
+    #statement = dataStatement #####
+    for ids,s_ in enumerate(statement):
+        #ids=0 #####
+        #s_=statement[ids] #####
+        s=s_[2]
+        sy=0
+        prop = {'annotators': 'tokenize,ssplit,pos,depparse,parse,relation,lemma','outputFormat': 'json'}
+        #print(str(ids)+' - '+str(ids%16))
+        print(ids)
+        if ids%16==0:
+            #print('ok')
+            ss = d[ids][0].split('. ')
+            ss = [re.sub(r'\.','',x) for x in ss]
+            ssdeps = []
+            for x in ss:        
+                ssnlp = nlp.annotate(x, properties=prop)
+                ssdepedencies = ssnlp['sentences'][0]['enhancedDependencies']
+                ssdeps.append(ssdepedencies)
+        sys=[]
+        for ssdep in ssdeps:
+            sy=0
+            #ssdep=ssdeps[0]
+            s1 = [x['dependentGloss'] +' '+ x['governorGloss'] +' '+ x['dep'] for idx,x in enumerate(ssdep[1:])]
+            snlp = nlp.annotate(s, properties=prop)
+            sdepedencies = snlp['sentences'][0]['enhancedDependencies']
+            s2 = [x['dependentGloss'] +' '+ x['governorGloss'] +' '+ x['dep'] for idx,x in enumerate(sdepedencies [1:])]
+            ins = list(set(s1) & set(s2))
+            sy=len(ins)
+            sys.append(sy)
+        msy = max(sys)
+        d[ids].append(msy)
+    return d
+    
+            
+
 def generateStatement(data):
-    d = [[x[2],x[2]] for x in data]
+    d = [[x[2],x[3]] for x in data]
     for idq,q in enumerate(d):
         #idq=12 #####
         print(idq)
@@ -121,8 +157,8 @@ def generateStatement(data):
             out = re.sub(r'[^a-zA-Z0-9\s\’\']+','',qOut)
             out = re.sub(r'\s{2}',' ',out)  
             
-        data[idq].append(out)
-    return data
+        d[idq].append(out)
+    return d
 
 qfpath = "data/train/mc500.train.tsv"
 afpath = "data/train/mc500.train.ans"
@@ -130,4 +166,5 @@ afpath = "data/train/mc500.train.ans"
 question,answer = convert(qfpath,afpath)
 data = toMatrix(question,answer)
 nlp = StanfordCoreNLP('http://localhost:9000')
-dataStatement = generateStatement(data[0:64])
+dataStatement = generateStatement(data)
+sf=syntaxFeature(dataStatement, data)
