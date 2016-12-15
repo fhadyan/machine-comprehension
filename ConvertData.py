@@ -44,4 +44,3 @@ afpath = "data/train/mc500.train.ans"
 
 question,answer=convert(qfpath,afpath)
 data=toMatrix(question,answer)
-
