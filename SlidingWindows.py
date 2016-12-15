@@ -21,31 +21,44 @@ def story(q):
                 store.append(temp)
     return store
 
-def calculate(data,story):
-    data1=[]
-    data2=[]
+def calculate(data,stors):
+    datax=[]
+    datay=[]
     for idx,x in enumerate(data):
-        store = story[math.floor(idx/16)]
         k = len(re.findall("[a-zA-Z_]+", str(x)))
+        data1 = str(x)
+        test = re.sub(r"(\?)",' ',data1)
+        data2 = test.split(' ')
+        stors1 = str(stors[math.floor(idx / 16)])
+        stors1 = stors1.split('.')
+        stors1 = [x.split(' ') for x in stors1]
+        stors2 = []
+        for j in stors1:
+            stors2.extend(j)
 
-        for i in range(len(store)-k):
-            temp = store[i:k]
-            icw=0
-            for s in data:
+        panjang = len(stors2)
+
+        for i in range(panjang - k):
+            temp = stors2[i:k]
+            icws = 0
+            for s in data2:
                 temp1 = temp.count(s)
-                sw = math.log10(1+ (1/temp1))
-                icw+=sw
-            data1.append(icw)
-        if (len(data1)==0):
-            swmin=0
-        else :
-            swmin=min(data1)
-        data2.append(swmin)
-    return data2
+                if (temp1==0):
+                    icw=0
+                else :
+                    icw = math.log10(1 + (1 / temp1))
+                icws += icw
+            datax.append(icws)
+        swmin = max(datax)
+        datay.append(swmin)
+    return datay
 
 qfpath = "data/train/mc500.train.tsv"
 afpath = "data/train/mc500.train.ans"
 question,answer=convert(qfpath,afpath)
 data=toString(question)
-story=story(question)
-test=calculate(data,story)
+stori=story(question)
+test = calculate(data,stori)
+
+for i in range(1,4800):
+    print(test[i])
