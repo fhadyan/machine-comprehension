@@ -14,13 +14,15 @@ def first(arr):
     return arr
 
 def generateStatement(data):
-    for idq,q in enumerate(data):
+    d = [[x[2],x[2]] for x in data]
+    for idq,q in enumerate(d):
         #idq=12 #####
         print(idq)
         #q=data[idq] #####
-        qs = q[2].lower()
+        if idq%4==0:
+            qs = q[0].lower()
         #qs = 'Who is the president?'.lower() #####
-        ans = q[3].lower()
+        ans = q[1].lower()
         #ans = 'Obama is'.lower() #####
         
         c=re.findall(r'who|what|how|where|when|why',qs)
@@ -128,4 +130,4 @@ afpath = "data/train/mc500.train.ans"
 question,answer = convert(qfpath,afpath)
 data = toMatrix(question,answer)
 nlp = StanfordCoreNLP('http://localhost:9000')
-dataStatement = generateStatement(data)
+dataStatement = generateStatement(data[0:64])
