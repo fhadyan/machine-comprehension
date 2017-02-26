@@ -38,9 +38,10 @@ def toMatrix(q, ans):
     return data
     
 
+
 qfpath = "data/train/mc500.train.tsv"
 afpath = "data/train/mc500.train.ans"
 
-
+ 
 question,answer=convert(qfpath,afpath)
 data=toMatrix(question,answer)

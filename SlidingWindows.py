@@ -22,22 +22,27 @@ def story(q):
     return store
 
 def calculate(data,stors):
-    datax=[]
     datay=[]
     for idx,x in enumerate(data):
+        #idx = 0 #####
+        #x = data[0] #####
+        #stors=stori #####
         k = len(re.findall("[a-zA-Z_]+", str(x)))
-        data1 = str(x)
-        test = re.sub(r"(\?)",' ',data1)
+        data1 = str(x[0])
+        test = re.sub(r"[^a-zA-Z0-9\s\']",' ',data1)
         data2 = test.split(' ')
-        stors1 = str(stors[math.floor(idx / 16)])
+        data2 = [y for y in data2 if len(y)>0]
+        stors1 = re.sub(r"[^a-zA-Z0-9\s\']",' ',str(stors[math.floor(idx / 16)][0]))
         stors1 = stors1.split('.')
-        stors1 = [x.split(' ') for x in stors1]
+        stors1 = [y.split(' ') for y in stors1]
         stors2 = []
         for j in stors1:
             stors2.extend(j)
-
+        stors2 = [y for y in stors2 if len(y)>0]
+                  
         panjang = len(stors2)
-
+        swmin=0
+        datax=[]
         for i in range(panjang - k):
             temp = stors2[i:k]
             icws = 0
@@ -53,12 +58,14 @@ def calculate(data,stors):
         datay.append(swmin)
     return datay
 
-qfpath = "data/train/mc500.train.tsv"
-afpath = "data/train/mc500.train.ans"
-question,answer=convert(qfpath,afpath)
-data=toString(question)
-stori=story(question)
-test = calculate(data,stori)
-
-for i in range(1,4800):
-    print(test[i])
+#==============================================================================
+# qfpath = "data/train/mc500.train.tsv"
+# afpath = "data/train/mc500.train.ans"
+# question,answer=convert(qfpath,afpath)
+# data=toString(question)
+# stori=story(question)
+# test = calculate(data,stori)
+# 
+# for i in range(1,4800):
+#     print(test[i])
+#==============================================================================

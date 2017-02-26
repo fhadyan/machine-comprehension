@@ -10,6 +10,9 @@ from gensim.models import Word2Vec
 import scipy.spatial.distance as dist
 
 def wordEmbed(dat):
+    min_count = 1
+    size = 100
+    window = 10
     out=[]
     for idd,d in enumerate(dat):
         #idd=0#####
@@ -54,14 +57,16 @@ def wordEmbed(dat):
             
         
 
-qfpath = "data/train/mc500.train.tsv"
-afpath = "data/train/mc500.train.ans"
-min_count = 1
-size = 100
-window = 10
-
-question,answer = convert(qfpath,afpath)
-data = toMatrix(question,answer)
-nlp = StanfordCoreNLP('http://localhost:9000')
-out = wordEmbed(data)
+#==============================================================================
+# qfpath = "data/train/mc500.train.tsv"
+# afpath = "data/train/mc500.train.ans"
+# min_count = 1
+# size = 100
+# window = 10
+# 
+# question,answer = convert(qfpath,afpath)
+# data = toMatrix(question,answer)
+# nlp = StanfordCoreNLP('http://localhost:9000')
+# out = wordEmbed(data)
+#==============================================================================
 
